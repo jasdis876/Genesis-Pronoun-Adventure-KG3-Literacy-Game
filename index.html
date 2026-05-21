@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Genesis' Pronoun Adventure | KG3 Literacy Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f9e76b 0%, #ffb347 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Comic Neue', 'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI Emoji', cursive, sans-serif;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .game-container {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 80px 80px 70px 70px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3), inset 0 1px 4px rgba(255,255,200,0.8);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .panel {
+            padding: 30px 25px 40px 25px;
+            display: none;
+            animation: fadePop 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        .active-panel {
+            display: block;
+        }
+
+        @keyframes fadePop {
+            0% { opacity: 0; transform: scale(0.97); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #d6341e;
+            text-shadow: 3px 3px 0 #ffd966;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            background: #fff0b5;
+            display: inline-block;
+            padding: 0 20px;
+            border-radius: 60px;
+            margin: 0 auto 20px;
+            width: fit-content;
+        }
+
+        .jamaica-badge {
+            background: #009b3a;
+            color: #ffeb3b;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 0 #1e5a2e;
+        }
+
+        .btn {
+            background: #ff8c42;
+            border: none;
+            color: white;
+            font-size: 1.7rem;
+            font-weight: bold;
+            font-family: inherit;
+            padding: 14px 28px;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 7px 0 #b45f2b;
+            transition: 0.07s linear;
+            margin: 12px 12px 0 0;
+            display: inline-block;
+        }
+
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 3px 0 #b45f2b;
+        }
+
+        .btn-green {
+            background: #2ecc71;
+            box-shadow: 0 7px 0 #229954;
+        }
+
+        .btn-blue {
+            background: #3498db;
+            box-shadow: 0 7px 0 #1f618d;
+        }
+
+        .btn-pink {
+            background: #e84393;
+            box-shadow: 0 7px 0 #b71540;
+        }
+
+        .btn-warning {
+            background: #f1c40f;
+            color: #2c3e50;
+            box-shadow: 0 7px 0 #b7950b;
+        }
+
+        .learn-card {
+            background: #feffd2;
+            border-radius: 65px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 4px solid #ffb347;
+            box-shadow: 0 12px 20px rgba(0,0,0,0.2);
+        }
+
+        .example-list {
+            font-size: 1.5rem;
+            line-height: 2.2rem;
+            background: #fff2db;
+            padding: 20px;
+            border-radius: 50px;
+            margin: 15px 0;
+        }
+
+        .example-list p {
+            margin: 12px 0;
+            background: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            display: inline-block;
+            width: auto;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .question-area {
+            background: #fffaf0;
+            border-radius: 55px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 3px solid #f39c12;
+        }
+
+        .question-text {
+            font-size: 2rem;
+            text-align: center;
+            background: #ffefc0;
+            padding: 20px;
+            border-radius: 60px;
+            margin-bottom: 25px;
+            word-break: break-word;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            background: #f7dc6f;
+            font-size: 1.8rem;
+            padding: 12px 28px;
+            border-radius: 50px;
+            border: none;
+            font-weight: bold;
+            font-family: inherit;
+            cursor: pointer;
+            transition: 0.1s;
+            box-shadow: 0 5px 0 #c9a43b;
+            min-width: 110px;
+        }
+
+        .option-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #c9a43b;
+        }
+
+        .feedback {
+            font-size: 1.8rem;
+            text-align: center;
+            padding: 15px;
+            background: #e9f7e1;
+            border-radius: 40px;
+            margin: 10px 0;
+        }
+
+        .matching-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .nouns-box, .pronouns-box {
+            flex: 1;
+            background: #ffeecc;
+            border-radius: 55px;
+            padding: 20px;
+            border: 3px solid #ffaa33;
+        }
+
+        .noun-item, .pronoun-item {
+            background: white;
+            margin: 15px 0;
+            padding: 16px;
+            border-radius: 80px;
+            text-align: center;
+            font-size: 1.7rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.1s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border: 2px solid #ffb347;
+        }
+
+        .noun-item.selected {
+            background: #ffe28a;
+            border: 4px solid #e67e22;
+            transform: scale(1.02);
+        }
+
+        .matched {
+            background: #a3e4d7 !important;
+            text-decoration: line-through;
+            opacity: 0.7;
+            cursor: default;
+            border: 2px solid #1e8449;
+            filter: grayscale(0.1);
+        }
+
+        .pronoun-item.matched {
+            background: #a3e4d7 !important;
+            cursor: default;
+        }
+
+        .certificate-card {
+            background: #fff8e7;
+            border: 12px double #f39c12;
+            border-radius: 70px;
+            padding: 40px 25px;
+            text-align: center;
+            margin: 30px 0;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.2);
+        }
+
+        .print-btn {
+            background: #2c3e50;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .bouncing-star {
+            animation: bounceStar 1s infinite alternate;
+            display: inline-block;
+            font-size: 2rem;
+            margin: 0 5px;
+        }
+
+        @keyframes bounceStar {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-12px); }
+        }
+
+        .name-input-area {
+            background: #ffefc0;
+            border-radius: 50px;
+            padding: 15px 25px;
+            margin: 20px auto;
+            display: inline-block;
+            width: auto;
+            text-align: center;
+        }
+
+        .name-input-area label {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+
+        .name-input-area input {
+            font-size: 1.5rem;
+            padding: 8px 18px;
+            border-radius: 40px;
+            border: 2px solid #f39c12;
+            font-family: inherit;
+            text-align: center;
+            background: white;
+        }
+
+        @media (max-width: 700px) {
+            .panel { padding: 20px 18px; }
+            .question-text { font-size: 1.6rem; }
+            .option-btn { font-size: 1.4rem; padding: 8px 18px; min-width: 80px; }
+            .btn { font-size: 1.3rem; padding: 10px 18px; }
+            .noun-item, .pronoun-item { font-size: 1.3rem; padding: 12px; }
+            .name-input-area input { font-size: 1.2rem; width: 180px; }
+        }
+
+        .score-progress {
+            font-size: 1.6rem;
+            background: gold;
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 40px;
+            margin-bottom: 12px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 12px;
+            font-size: 0.9rem;
+            background: #ffd96699;
+            border-radius: 30px;
+            margin-top: 15px;
+        }
+
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+<div class="game-container" id="gameContainer">
+    <!-- WELCOME SCREEN with name input -->
+    <div id="welcomePanel" class="panel active-panel">
+        <div style="text-align: center;">
+            <div class="bouncing-star">⭐</div>
+            <div class="bouncing-star">🌟</div>
+            <div class="bouncing-star">✨</div>
+            <h1>📖 Genesis' Pronoun Adventure 🦜</h1>
+            <div class="jamaica-badge">🇯🇲 Eber Preparatory, St. James, Jamaica 🇯🇲</div>
+            <p style="font-size: 1.5rem; background: #ffdd99; display: inline-block; padding: 10px 25px; border-radius: 50px;">👧 A game by Genesis Griffiths • KG3 🌈</p>
+            
+            <!-- Name entry for certificate -->
+            <div class="name-input-area">
+                <label>✨ Your Name: ✨</label>
+                <input type="text" id="childNameInput" placeholder="Enter your name" value="Genesis Griffiths" maxlength="30">
+                <div style="font-size:1rem; margin-top:8px;">⭐ This name will go on your certificate! ⭐</div>
+            </div>
+            
+            <div style="margin: 30px 0;">
+                <div style="font-size: 5rem;">🐻‍❄️🎈📚</div>
+                <button id="startGameBtn" class="btn btn-green" style="font-size: 2rem; margin-top: 20px;">🚀 Start Adventure!</button>
+            </div>
+            <div>
+                <span>🐾</span><span>🍎</span><span>📖</span><span>⭐</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEARN SECTION -->
+    <div id="learnPanel" class="panel">
+        <h2>📚 Let's Learn Pronouns! 🧸</h2>
+        <div class="learn-card">
+            <p style="font-size: 1.8rem; text-align: center;">✨ Pronouns are words we use INSTEAD of names! ✨</p>
+            <div class="example-list">
+                <p>👧 Genesis is a girl. → <strong>She</strong> is happy.</p>
+                <p>🐕 The dog is small. → <strong>It</strong> is cute.</p>
+                <p>👩👦 Mommy and I are reading. → <strong>We</strong> are reading.</p>
+                <p>🧒🧒 The children are playing. → <strong>They</strong> are playing.</p>
+                <p>👨 Daddy is strong. → <strong>He</strong> works hard.</p>
+                <p>🍦 I love ice cream. → <strong>I</strong> want more!</p>
+            </div>
+            <div class="flex-center">
+                <button id="goToGameBtn" class="btn btn-blue">🎮 Let's Play Quiz! 🎮</button>
+            </div>
+        </div>
+        <footer>⭐ Pronouns: I, he, she, it, we, they ⭐</footer>
+    </div>
+
+    <!-- GAME SECTION (multiple choice) -->
+    <div id="gamePanel" class="panel">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap;">
+            <div class="score-progress" id="scoreDisplay">⭐ Score: 0</div>
+            <div class="score-progress" id="qCounter">Question 1 / 10</div>
+        </div>
+        <div class="question-area">
+            <div class="question-text" id="questionText">Loading...</div>
+            <div class="options" id="optionsContainer"></div>
+            <div class="feedback" id="feedbackMsg"></div>
+            <div class="flex-center">
+                <button id="nextQuestionBtn" class="btn btn-warning" disabled>👉 Next Question</button>
+            </div>
+        </div>
+        <footer>✨ Tap an answer, then press NEXT! ✨</footer>
+    </div>
+
+    <!-- MATCHING SECTION (click-based, easy cross matching) -->
+    <div id="matchingPanel" class="panel">
+        <h2>🧩 Match the words! 🧩</h2>
+        <p style="font-size: 1.3rem; text-align:center;">⭐ Click a word on the LEFT, then click a pronoun on the RIGHT to match! ⭐</p>
+        <div class="matching-grid">
+            <div class="nouns-box">
+                <h3>📌 Names / Things (click me first)</h3>
+                <div id="nounsList"></div>
+            </div>
+            <div class="pronouns-box">
+                <h3>🔤 Pronouns (then click me)</h3>
+                <div id="pronounsList"></div>
+            </div>
+        </div>
+        <div id="matchFeedback" style="font-size:1.6rem; text-align:center; margin:15px; background: #fff0b5; border-radius:50px; padding:12px;"></div>
+        <div class="flex-center">
+            <button id="resetMatchingBtn" class="btn">🔄 Reset Matching</button>
+            <button id="completeMatchToCertBtn" class="btn btn-green" style="display:none;">🏆 Get Certificate! 🏆</button>
+        </div>
+        <footer>🇯🇲 Match all 5 pairs to win your certificate! Teacher: Mrs. Crystal Poyser-Grey</footer>
+    </div>
+
+    <!-- CERTIFICATE SCREEN (dynamic name) -->
+    <div id="certificatePanel" class="panel">
+        <div class="certificate-card" id="certificateCard">
+            <h1 style="font-size: 2.8rem;">🏅 Certificate of Completion 🏅</h1>
+            <div style="margin: 20px 0; font-size:1.6rem;">
+                <p>This certifies that</p>
+                <p style="font-size:2.2rem; font-weight:bold; background:#fff0b5; display:inline-block; padding:0 20px; border-radius:30px;" id="certNameDisplay">Genesis Griffiths</p>
+                <p>has completed the <strong>Pronoun Adventure Game</strong> with flying colours! 🌟</p>
+                <p>📅 Date: <span id="certDate"></span></p>
+                <p>👩‍🏫 Teacher: Mrs. Crystal Poyser-Grey</p>
+                <p>🏫 Eber Preparatory, St. James, Jamaica</p>
+            </div>
+            <button id="printCertificateBtn" class="btn print-btn">🖨️ Print Certificate</button>
+            <button id="restartBtn" class="btn btn-pink" style="margin-top:15px;">🎮 Play Again 🎮</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ========================  PRONOUN QUIZ DATA ========================
+    const questions = [
+        { text: "Genesis is smiling. ___ is happy.", options: ["He", "She", "They"], correct: "She" },
+        { text: "Daddy is tall. ___ is strong.", options: ["He", "She", "It"], correct: "He" },
+        { text: "The pencil is on the desk. ___ is blue.", options: ["It", "They", "He"], correct: "It" },
+        { text: "My brother and I play football. ___ play together.", options: ["We", "They", "He"], correct: "We" },
+        { text: "The puppies are cute. ___ are playing.", options: ["It", "They", "She"], correct: "They" },
+        { text: "Mommy cooks dinner. ___ is a good cook.", options: ["She", "He", "It"], correct: "She" },
+        { text: "The flowers in the garden are pretty. ___ smell nice.", options: ["It", "They", "He"], correct: "They" },
+        { text: "I have a toy car. ___ like to race it.", options: ["I", "We", "She"], correct: "I" },
+        { text: "My friend Jamal runs fast. ___ wins the race.", options: ["He", "She", "It"], correct: "He" },
+        { text: "The book is interesting. ___ has many pictures.", options: ["It", "They", "We"], correct: "It" }
+    ];
+    let currentQuestionIndex = 0;
+    let quizScore = 0;
+    let quizAnswered = false;
+    let selectedAnswer = null;
+
+    // matching variables
+    let matchingPairs = [
+        { noun: "Genesis", pronoun: "she", matched: false, nounId: "noun_genesis", pronounId: "pron_she" },
+        { noun: "Daddy", pronoun: "he", matched: false, nounId: "noun_daddy", pronounId: "pron_he" },
+        { noun: "The ball", pronoun: "it", matched: false, nounId: "noun_ball", pronounId: "pron_it" },
+        { noun: "Mommy and I", pronoun: "we", matched: false, nounId: "noun_we", pronounId: "pron_we" },
+        { noun: "The children", pronoun: "they", matched: false, nounId: "noun_they", pronounId: "pron_they" }
+    ];
+    let selectedNounElem = null;
+    let selectedNounKey = null;
+
+    // Audio (simple web audio)
+    let audioCtx = null;
+    function initAudio() {
+        if (audioCtx) return audioCtx;
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        return audioCtx;
+    }
+    function playTone(freq, duration, type = "sine") {
+        try {
+            const ctx = initAudio();
+            if (ctx.state === "suspended") {
+                ctx.resume().then(() => playNow(ctx, freq, duration, type));
+            } else {
+                playNow(ctx, freq, duration, type);
+            }
+        } catch(e) { console.log("audio not supported"); }
+    }
+    function playNow(ctx, freq, duration, type) {
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.value = 0.3;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.00001, now + duration);
+        osc.stop(now + duration);
+    }
+    function playCorrectSound() { playTone(880, 0.2, "sine"); }
+    function playWrongSound() { playTone(440, 0.25, "triangle"); }
+
+    // UI panels helper
+    const panels = {
+        welcome: document.getElementById('welcomePanel'),
+        learn: document.getElementById('learnPanel'),
+        game: document.getElementById('gamePanel'),
+        matching: document.getElementById('matchingPanel'),
+        certificate: document.getElementById('certificatePanel')
+    };
+    function showPanel(panelName) {
+        Object.keys(panels).forEach(p => panels[p].classList.remove('active-panel'));
+        panels[panelName].classList.add('active-panel');
+    }
+
+    // ~~~~~ QUIZ LOGIC ~~~~~
+    function loadQuestion() {
+        const q = questions[currentQuestionIndex];
+        document.getElementById('questionText').innerHTML = q.text;
+        const optsContainer = document.getElementById('optionsContainer');
+        optsContainer.innerHTML = '';
+        q.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => handleAnswer(opt);
+            optsContainer.appendChild(btn);
+        });
+        document.getElementById('feedbackMsg').innerHTML = '✨ Choose an answer! ✨';
+        document.getElementById('nextQuestionBtn').disabled = true;
+        quizAnswered = false;
+        selectedAnswer = null;
+        document.getElementById('scoreDisplay').innerHTML = `⭐ Score: ${quizScore}`;
+        document.getElementById('qCounter').innerHTML = `Question ${currentQuestionIndex+1} / ${questions.length}`;
+    }
+    function handleAnswer(selected) {
+        if (quizAnswered) return;
+        const correctAns = questions[currentQuestionIndex].correct;
+        if (selected === correctAns) {
+            quizScore++;
+            document.getElementById('feedbackMsg').innerHTML = '🎉 Great job! 🎉 +1 point!';
+            playCorrectSound();
+        } else {
+            document.getElementById('feedbackMsg').innerHTML = `😢 Try again! The correct answer is "${correctAns}". 😢`;
+            playWrongSound();
+        }
+        quizAnswered = true;
+        selectedAnswer = selected;
+        document.getElementById('nextQuestionBtn').disabled = false;
+        document.getElementById('scoreDisplay').innerHTML = `⭐ Score: ${quizScore}`;
+        const allOpts = document.querySelectorAll('#optionsContainer .option-btn');
+        allOpts.forEach(btn => { btn.style.opacity = '0.6'; btn.disabled = true; });
+    }
+    function nextQuestion() {
+        if (!quizAnswered) return;
+        if (currentQuestionIndex + 1 < questions.length) {
+            currentQuestionIndex++;
+            loadQuestion();
+        } else {
+            document.getElementById('feedbackMsg').innerHTML = '🏆 You finished all questions! 🏆 Time for matching fun!';
+            document.getElementById('nextQuestionBtn').disabled = true;
+            let goMatchBtn = document.getElementById('dynamicMatchBtn');
+            if (!goMatchBtn) {
+                goMatchBtn = document.createElement('button');
+                goMatchBtn.innerText = '🎯 Go to Matching Game 🎯';
+                goMatchBtn.className = 'btn btn-green';
+                goMatchBtn.id = 'dynamicMatchBtn';
+                goMatchBtn.onclick = () => {
+                    initMatchingScreen();
+                    showPanel('matching');
+                };
+                const parent = document.querySelector('#gamePanel .flex-center');
+                parent.appendChild(goMatchBtn);
+            }
+        }
+    }
+    function resetQuizState() {
+        currentQuestionIndex = 0;
+        quizScore = 0;
+        quizAnswered = false;
+        selectedAnswer = null;
+        loadQuestion();
+        const extra = document.getElementById('dynamicMatchBtn');
+        if (extra) extra.remove();
+    }
+
+    // ~~~~~ MATCHING GAME (click-based) ~~~~~
+    function renderMatching() {
+        const nounsDiv = document.getElementById('nounsList');
+        const pronounsDiv = document.getElementById('pronounsList');
+        nounsDiv.innerHTML = '';
+        pronounsDiv.innerHTML = '';
+        matchingPairs.forEach(pair => {
+            const nounDiv = document.createElement('div');
+            nounDiv.className = 'noun-item';
+            if (pair.matched) nounDiv.classList.add('matched');
+            nounDiv.innerText = pair.noun;
+            nounDiv.dataset.nounKey = pair.noun;
+            nounDiv.onclick = (e) => {
+                e.stopPropagation();
+                if (pair.matched) return;
+                document.querySelectorAll('.noun-item').forEach(el => el.classList.remove('selected'));
+                nounDiv.classList.add('selected');
+                selectedNounElem = nounDiv;
+                selectedNounKey = pair.noun;
+                document.getElementById('matchFeedback').innerHTML = `👉 Now click a PRONOUN to match "${pair.noun}" 👈`;
+            };
+            nounsDiv.appendChild(nounDiv);
+        });
+        // pronouns list order: she, he, it, we, they (matching the pairs)
+        const pronounList = [
+            { display: "she", target: "she" },
+            { display: "he", target: "he" },
+            { display: "it", target: "it" },
+            { display: "we", target: "we" },
+            { display: "they", target: "they" }
+        ];
+        pronounList.forEach(pron => {
+            const pronDiv = document.createElement('div');
+            pronDiv.className = 'pronoun-item';
+            const matchedPair = matchingPairs.find(p => p.pronoun === pron.target && p.matched === true);
+            if (matchedPair) pronDiv.classList.add('matched');
+            pronDiv.innerText = pron.display;
+            pronDiv.dataset.pronounValue = pron.target;
+            pronDiv.onclick = () => {
+                if (!selectedNounKey) {
+                    document.getElementById('matchFeedback').innerHTML = '✨ First click a NAME or THING (left side)! ✨';
+                    playWrongSound();
+                    return;
+                }
+                const selectedNounObj = matchingPairs.find(p => p.noun === selectedNounKey);
+                if (selectedNounObj.matched) {
+                    document.getElementById('matchFeedback').innerHTML = '⛔ This word is already matched! Choose another.';
+                    playWrongSound();
+                    clearNounSelection();
+                    return;
+                }
+                if (pronDiv.classList.contains('matched')) {
+                    document.getElementById('matchFeedback').innerHTML = '⛔ This pronoun is already used!';
+                    playWrongSound();
+                    clearNounSelection();
+                    return;
+                }
+                if (selectedNounObj.pronoun === pron.target) {
+                    selectedNounObj.matched = true;
+                    playCorrectSound();
+                    document.getElementById('matchFeedback').innerHTML = `🎉 Perfect match! ${selectedNounKey} → ${pron.target} 🎉`;
+                    renderMatching();
+                    clearNounSelection();
+                    checkAllMatched();
+                } else {
+                    playWrongSound();
+                    document.getElementById('matchFeedback').innerHTML = `❌ Oops! "${selectedNounKey}" does NOT match "${pron.target}". Try again! ❌`;
+                    clearNounSelection();
+                }
+            };
+            pronounsDiv.appendChild(pronDiv);
+        });
+    }
+    function clearNounSelection() {
+        if (selectedNounElem) selectedNounElem.classList.remove('selected');
+        selectedNounElem = null;
+        selectedNounKey = null;
+    }
+    function checkAllMatched() {
+        const allMatched = matchingPairs.every(p => p.matched === true);
+        const certBtn = document.getElementById('completeMatchToCertBtn');
+        if (allMatched) {
+            document.getElementById('matchFeedback').innerHTML = '🌈✨ AMAZING! You matched all pronouns! ✨🌈';
+            certBtn.style.display = 'inline-block';
+            launchMiniConfetti();
+        } else {
+            certBtn.style.display = 'none';
+        }
+    }
+    function resetMatching() {
+        matchingPairs.forEach(p => p.matched = false);
+        renderMatching();
+        clearNounSelection();
+        document.getElementById('matchFeedback').innerHTML = '🔄 Matching reset! Click a name then a pronoun.';
+        document.getElementById('completeMatchToCertBtn').style.display = 'none';
+    }
+    function initMatchingScreen() {
+        resetMatching();
+    }
+    
+    // simple confetti
+    function launchMiniConfetti() {
+        const canvas = document.createElement('canvas');
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.style.pointerEvents = 'none';
+        canvas.style.zIndex = '9999';
+        document.body.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particles = [];
+        for (let i=0;i<80;i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                radius: Math.random() * 6 + 3,
+                color: `hsl(${Math.random() * 360}, 80%, 60%)`,
+                speedY: Math.random() * 8 + 4,
+                speedX: (Math.random() - 0.5) * 3,
+            });
+        }
+        let animFrame;
+        function drawConfetti() {
+            if (!canvas.parentNode) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let stillGoing = false;
+            for (let p of particles) {
+                p.y += p.speedY;
+                p.x += p.speedX;
+                if (p.y < canvas.height + 50) stillGoing = true;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+            }
+            if (stillGoing) {
+                animFrame = requestAnimationFrame(drawConfetti);
+            } else {
+                cancelAnimationFrame(animFrame);
+                canvas.remove();
+            }
+        }
+        drawConfetti();
+        setTimeout(() => {
+            if (canvas.parentNode) canvas.remove();
+            if (animFrame) cancelAnimationFrame(animFrame);
+        }, 2000);
+    }
+    
+    // certificate with dynamic name
+    function showCertificate() {
+        const nameInput = document.getElementById('childNameInput');
+        let childName = nameInput.value.trim();
+        if (childName === "") childName = "Genesis Griffiths";
+        document.getElementById('certNameDisplay').innerText = childName;
+        const dateSpan = document.getElementById('certDate');
+        const today = new Date();
+        dateSpan.innerText = today.toLocaleDateString('en-JM', {year:'numeric', month:'long', day:'numeric'});
+        showPanel('certificate');
+        launchMiniConfetti();
+    }
+    
+    function printCertificate() {
+        const originalTitle = document.title;
+        document.title = "Pronoun Adventure Certificate";
+        window.print();
+        document.title = originalTitle;
+    }
+    
+    function fullRestart() {
+        resetQuizState();
+        resetMatching();
+        currentQuestionIndex = 0;
+        quizScore = 0;
+        quizAnswered = false;
+        const extra = document.getElementById('dynamicMatchBtn');
+        if (extra) extra.remove();
+        showPanel('welcome');
+    }
+
+    // Event listeners
+    document.getElementById('startGameBtn').addEventListener('click', () => showPanel('learn'));
+    document.getElementById('goToGameBtn').addEventListener('click', () => {
+        resetQuizState();
+        showPanel('game');
+    });
+    document.getElementById('nextQuestionBtn').addEventListener('click', nextQuestion);
+    document.getElementById('resetMatchingBtn').addEventListener('click', resetMatching);
+    document.getElementById('completeMatchToCertBtn').addEventListener('click', showCertificate);
+    document.getElementById('printCertificateBtn').addEventListener('click', printCertificate);
+    document.getElementById('restartBtn').addEventListener('click', fullRestart);
+    
+    // initial matching render
+    renderMatching();
+</script>
+</body>
+</html>
